@@ -28,6 +28,7 @@ jobs:
       - run: npm version patch -m "[RELEASE] %s"
       - run: git push
       - run: npm install
+      - run: npm run-p build:types build:lib
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
