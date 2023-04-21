@@ -5,7 +5,7 @@
 You can add Vue Ganttastic to your project using <kbd>npm</kbd>:
 
 ```
-npm install @infectoone/vue-ganttastic
+npm install @deand-code/vue-ganttastic
 ```  
 Then, initalize the plugin in the starting point of your app (most likely `src/main.js`):
 
@@ -13,7 +13,7 @@ Then, initalize the plugin in the starting point of your app (most likely `src/m
 import { createApp } from "vue"
 import App from "./App.vue"
 ...
-import ganttastic from '@infectoone/vue-ganttastic'
+import ganttastic from '@deand-code/vue-ganttastic'
 ...
 createApp(App)
   .use(ganttastic)
