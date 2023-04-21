@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "name": "@deand-code/vue-ganttastic",
   "version": "2.1.4",
+=======
+  "name": "@infectoone/vue-ganttastic",
+  "version": "2.1.5",
+>>>>>>> af72c3c300610f4067757400f8edd2cc8f61d917
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "author": "",
   "scripts": {
