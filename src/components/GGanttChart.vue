@@ -15,8 +15,10 @@
       </template>
     </g-gantt-timeaxis>
 
+    <g-gantt-line v-if="!hideTimeaxis" :left="left" />
+   
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-
+    
     <div class="g-gantt-rows-container">
       <slot />
       <!-- the g-gantt-row components go here -->
@@ -44,6 +46,7 @@ import {
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
+import GGanttLine from "./GGanttLine.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
