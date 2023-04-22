@@ -1,5 +1,5 @@
 <template>
-    <div class="line" :style="{ left: left }"></div>
+    <div class="line" :style="{ left: 30 }"></div>
 </template>
 
 <script setup lang="ts">
