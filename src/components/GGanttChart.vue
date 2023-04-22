@@ -15,7 +15,7 @@
       </template>
     </g-gantt-timeaxis>
 
-    <g-gantt-line v-if="!hideTimeaxis" :left="left" />
+    <g-gantt-line v-if="!hideTimeaxis" left="30" />
    
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
     
