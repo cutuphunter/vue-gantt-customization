@@ -16,6 +16,10 @@
     </g-gantt-timeaxis>
 
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
+    <g-gantt-line :lines="lines"
+                  :chart-start-date= "chartStart"
+                  :chart-end-date="chartEnd"  
+                  :highlighted-units="highlightedUnits" />
 
     <div class="g-gantt-rows-container">
       <slot />
@@ -43,12 +47,13 @@ import {
 } from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
+import GGanttLine from "./GGanttLine.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
 import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
-import type { GanttBarObject } from "../types"
+import type { GanttBarObject, GanttLineObject } from "../types"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
 
@@ -68,6 +73,7 @@ export interface GGanttChartProps {
   rowHeight?: number
   highlightedUnits?: number[]
   font?: string
+  lines: GanttLineObject[]
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {

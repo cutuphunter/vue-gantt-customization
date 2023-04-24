@@ -70,6 +70,7 @@
     "url": "https://github.com/InfectoOne/vue-ganttastic"
   },
   "dependencies": {
-    "@vueuse/core": "^9.1.1"
+    "@vueuse/core": "^9.1.1",
+    "dayjs": "^1.11.7"
   }
 }

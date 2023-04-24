@@ -9,6 +9,7 @@
     bar-start="beginDate"
     bar-end="endDate"
     :date-format="format"
+    :lines="lines_datetime"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
+import type { GanttLineObject } from "./types.js"
 
 const chartStart = ref("21.03.2021 12:00")
 const chartEnd = ref("15.07.2021 12:00")
@@ -153,4 +155,28 @@ const onDragendBar = (
 const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("contextmenu-bar", bar, e, datetime)
 }
+const lines_datetime = ref<GanttLineObject[]>([
+  {
+    datetime: "2021.05.24 23:00",
+    color:"red",
+    width:'3px',
+    opacity:'0.9',
+    // ganttBarConfig: {
+    //   id: "8621987329",
+    //   label: "I'm in a bundle",
+    //   bundle: "bundle2"
+    // }
+  },
+  {
+    datetime: "2021.06.24 23:00",
+    color:"yellow",
+    width:'2px',
+    opacity:'0.9',
+    // ganttBarConfig: {
+    //   id: "8621987329",
+    //   label: "I'm in a bundle",
+    //   bundle: "bundle2"
+    // }
+  }
+])
 </script>
