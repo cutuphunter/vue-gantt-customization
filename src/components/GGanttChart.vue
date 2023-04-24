@@ -15,8 +15,10 @@
       </template>
     </g-gantt-timeaxis>
 
+    <!-- <g-gantt-line v-if="!hideTimeaxis" left="30" /> -->
+   
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-    <g-gantt-line :lines="lines"
+        <g-gantt-line :lines="lines"
                   :chart-start-date= "chartStart"
                   :chart-end-date="chartEnd"  
                   :highlighted-units="highlightedUnits" />

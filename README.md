@@ -26,14 +26,14 @@ Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/zunnzunn/vue-gantt
 ## Quickstart
 Install using
 ```
-npm install @infectoone/vue-ganttastic
+npm install @deand-code/vue-ganttastic
 ```
 Then, initalize the plugin in the starting point of your app (most likely src/main.js):
 ```js
 import { createApp } from "vue"
 import App from "./App.vue"
 ...
-import ganttastic from '@infectoone/vue-ganttastic'
+import ganttastic from '@deand-code/vue-ganttastic'
 ...
 createApp(App)
   .use(ganttastic)
@@ -134,3 +134,5 @@ BTC address: bc1qmz4gcewnarl6ldfz78x2htrf7ux6yvl3p2aqje
 ![image](https://user-images.githubusercontent.com/28678851/148191529-b50c0d17-bcc1-4a78-9d2c-ff2a36b03f52.png)  
 
 ![image](https://user-images.githubusercontent.com/28678851/148191757-a2520dce-aeed-43df-87b2-3a64e225f9e7.png)
+
+test commmit for build

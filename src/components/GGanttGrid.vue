@@ -22,6 +22,8 @@ defineProps<{
 
 const { colors } = provideConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
+const left = 20
+
 </script>
 
 <style>

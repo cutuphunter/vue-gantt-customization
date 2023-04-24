@@ -3,7 +3,7 @@
     :chart-start="chartStart"
     :chart-end="chartEnd"
     precision="month"
-    :row-height="40"
+    :row-height="90"
     grid
     width="100%"
     bar-start="beginDate"
