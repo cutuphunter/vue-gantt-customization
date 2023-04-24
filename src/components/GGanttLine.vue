@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="g-line-container">
     <div v-for="line in lines" :key="line.datetime" class="g-line-style" :style="{
         left: calcLeft(line.datetime, chartStartDate, chartEndDate),
@@ -7,7 +6,6 @@
         borderLeft: `${line.width} solid ${line.color}`,
       }" />
   </div>
-  {{ typeof chartStartDate }}
 </template>
 
 <script setup lang="ts">
@@ -85,27 +83,4 @@ const calcLeft = (curTime: string, startDateTime: string | Date, endDateTime: st
   border-left: 1px solid red;
 }
 </style>
-=======
-    <div class="line" :style="{ left: 30 }"></div>
-</template>
 
-<script setup lang="ts">
-
-</script>
-
-<style scoped>
-.line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 25%;
-  height: 100%;
-  z-index: 999;
-  /* Use the prop value to set the line's left position */
-  /* You can also add any other styles as needed */
-  /*:style="{ left: left, width: '3px', backgroundColor: 'black' }" */
-  width: 3px;
-  background-color: black;
-}
-</style>
->>>>>>> 2d6516f338f07450a441e1f29556f2fb94090852

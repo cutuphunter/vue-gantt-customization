@@ -3,7 +3,7 @@
     :chart-start="chartStart"
     :chart-end="chartEnd"
     precision="month"
-    :row-height="90"
+    :row-height="50"
     grid
     width="100%"
     bar-start="beginDate"
@@ -161,22 +161,12 @@ const lines_datetime = ref<GanttLineObject[]>([
     color:"red",
     width:'3px',
     opacity:'0.9',
-    // ganttBarConfig: {
-    //   id: "8621987329",
-    //   label: "I'm in a bundle",
-    //   bundle: "bundle2"
-    // }
   },
   {
     datetime: "2021.06.24 23:00",
     color:"yellow",
     width:'2px',
     opacity:'0.9',
-    // ganttBarConfig: {
-    //   id: "8621987329",
-    //   label: "I'm in a bundle",
-    //   bundle: "bundle2"
-    // }
   }
 ])
 </script>
