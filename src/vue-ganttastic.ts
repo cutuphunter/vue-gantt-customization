@@ -10,6 +10,8 @@ import type { ColorScheme } from "./color-schemes"
 
 import GGanttChart from "./components/GGanttChart.vue"
 import GGanttRow from "./components/GGanttRow.vue"
+import mitt from 'mitt';
+const emitter = mitt();
 
 export function extendDayjs() {
   dayjs.extend(isSameOrBefore)
@@ -26,6 +28,7 @@ export const ganttastic: Plugin = {
     extendDayjs()
     app.component("GGanttChart", GGanttChart)
     app.component("GGanttRow", GGanttRow)
+    app.config.globalProperties.emitter = emitter;
   }
 }
 

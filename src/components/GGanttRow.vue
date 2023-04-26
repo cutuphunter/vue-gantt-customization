@@ -1,14 +1,8 @@
 <template>
-  <div
-    class="g-gantt-row"
-    :style="rowStyle"
-    @dragover.prevent="isHovering = true"
-    @dragleave="isHovering = false"
-    @drop="onDrop($event)"
-    @mouseover="isHovering = true"
-    @mouseleave="isHovering = false"
-  >
+  <div class="g-gantt-row" :style="rowStyle" @dragover.prevent="isHovering = true" @dragleave="isHovering = false"
+    @drop="onDrop($event)" @mouseover="isHovering = true" @mouseleave="isHovering = false">
     <div class="g-gantt-row-label" :style="{ background: colors.primary, color: colors.text }">
+      <CToggleButton :custom-handle="toggle" />
       <slot name="label">
         {{ label }}
       </slot>
@@ -24,13 +18,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, toRefs, computed, type StyleValue, provide } from "vue"
+import { ref, type Ref, toRefs, computed, type StyleValue, provide} from "vue"
 
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
 import provideConfig from "../provider/provideConfig.js"
 import type { GanttBarObject } from "../types"
 import GGanttBar from "./GGanttBar.vue"
 import { BAR_CONTAINER_KEY } from "../provider/symbols"
+import CToggleButton from './CToggleButton.vue';
+
+import { getCurrentInstance } from 'vue'
+
+const app = getCurrentInstance()
+const bus = app.appContext.config.globalProperties.emitter // app is undefined
+
+const emitter = app.appContext.config.globalProperties.emitter;
+emitter.on("custom-expend-rows", (receiveData) => {
+  // console.log('event bus data', receiveData)
+  toggle(receiveData.payload)
+});
 
 const props = defineProps<{
   label: string
@@ -45,11 +51,11 @@ const emit = defineEmits<{
 const { rowHeight, colors } = provideConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
-
+const customHeight = ref(rowHeight.value)
 const rowStyle = computed(() => {
   return {
-    height: `${rowHeight.value}px`,
-    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
+    height: `${customHeight.value}px`,
+    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null,
   } as StyleValue
 })
 
@@ -68,6 +74,19 @@ const onDrop = (e: MouseEvent) => {
   const datetime = mapPositionToTime(xPos)
   emit("drop", { e, datetime })
 }
+
+const toggle = (isOpen: boolean) => {
+  // console.log('isOpen', isOpen.value)
+  if (isOpen) {
+    // console.log('opened')
+    customHeight.value = 90
+
+  } else {
+    // console.log('closed')
+    customHeight.value = rowHeight.value
+  }
+
+}
 </script>
 
 <style>
@@ -77,7 +96,7 @@ const onDrop = (e: MouseEvent) => {
   position: relative;
 }
 
-.g-gantt-row > .g-gantt-row-bars-container {
+.g-gantt-row>.g-gantt-row-bars-container {
   position: relative;
   border-top: 1px solid #eaeaea;
   width: 100%;

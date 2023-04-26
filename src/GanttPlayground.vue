@@ -1,6 +1,6 @@
 <template>
-  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" :row-height="50" grid width="100%"
-    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime"
+  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%"
+    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -170,26 +170,34 @@ const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
 
   let startDate = convertStringToDate(chartStart.value),
     endDate = convertStringToDate(chartEnd.value);
-  console.log('difftime', parseInt(diffTime, 10), timeline, diffTime);
 
-  startDate = new Date(startDate.getTime() - parseInt(diffTime)*60000);
-  endDate = new Date(endDate.getTime() - parseInt(diffTime)*60000);
+  console.log('difftime', parseInt(diffTime, 10), timeline, diffTime + 'mins');
+  console.log(startDate.getTime(), endDate.getTime());
+
+  const sDate = new Date();//startDate.getTime() parseInt(diffTime)*60000
+  const eDate = new Date();//endDate.getTime()parseInt(diffTime)*60000
   
-  console.log('update dates', startDate, endDate);
-  chartStart.value = convertDate2FormatString(startDate);
-  chartEnd.value = convertDate2FormatString(endDate);
+  sDate.setTime(startDate.getTime());
+  eDate.setTime(endDate.getTime());
 
+
+  console.log('update dates', sDate, eDate);
+  chartStart.value = convertDate2FormatString(sDate);
+  chartEnd.value = convertDate2FormatString(eDate);
 }
 const convertStringToDate = (timestring: string) => {
+ 
   console.log("input time string", timestring);
   let result = timestring.split(/[- ]/);
   let formatTime = result[0] + '-' + result[1] + '-' + result[2] + 'T' + result[3];
-  return new Date(formatTime)
+  const resultDate = new Date(formatTime);
+  return resultDate;
 }
 const convertDate2FormatString = (datetime: Date) => {
   console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
   let formatDate = "2023-04-25 12:00";
   let result = datetime.toISOString().split(/[-T:]/);
+  console.log(datetime.toString());
   formatDate = result[0] + '-' + result[1] + '-' + result[2] + ' ' + result[3] + ':' + result[4];
   console.log("output date", formatDate);
   return formatDate

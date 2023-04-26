@@ -1,5 +1,6 @@
 <template>
   <div ref="ganttChart" class="g-gantt-chart" :style="{ width, background: colors.background, fontFamily: font }">
+    <CToggleButton :custom-handle="toggle"/>
     <g-gantt-timeaxis v-if="!hideTimeaxis">
       <template #upper-timeunit="{ label, value, date }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
@@ -52,10 +53,24 @@ import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY, EMIT_TIMELINE_EVENT_KEY } from "../provider/symbols.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY, EMIT_TIMELINE_EVENT_KEY, EMIT_CUSTOM_EVENT_KEY} from "../provider/symbols.js"
 import type { GanttBarObject, GanttLineObject } from "../types"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
+import CToggleButton from './CToggleButton.vue';
+import mitt from 'mitt';
+
+import { getCurrentInstance } from 'vue'
+const app = getCurrentInstance()
+const emitter = app.appContext.config.globalProperties.emitter // app is undefined
+
+// const emitter = mitt();
+// emitter.on("custom-expend-rows", isOpen => {
+//   console.log('event bus data', isOpen)
+//   isOpen = isOpen;
+// });
+
+// const emitter = mitt();
 
 export interface GGanttChartProps {
   chartStart: string | Date
@@ -99,6 +114,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
 })
 
 const emit = defineEmits<{
+
   (e: "click-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }): void
   (
     e: "mousedown-bar",
@@ -123,6 +139,7 @@ const emit = defineEmits<{
     value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }
   ): void
   (e: "drag-timeline", value: { e: MouseEvent; timeline?: string | Date }): void
+  (e: "custom-expend-rows", value: { type: string; payload: boolean }): void
 }>()
 
 const { width, font, colorScheme } = toRefs(props)
@@ -235,6 +252,17 @@ const emitTimelineEvent = (
       break
   }
 }
+const EmitCustomEvent = (
+  type: string,
+  payload: boolean,
+) => {
+  console.log('I received ', type, payload)
+  if (payload == true) {
+    console.log('I received ', type, payload)
+  } else {
+
+  }
+}
 
 const ganttChart = ref<HTMLElement | null>(null)
 const chartSize = useElementSize(ganttChart)
@@ -247,11 +275,17 @@ provide(CONFIG_KEY, {
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 provide(EMIT_TIMELINE_EVENT_KEY, emitTimelineEvent)
+provide(EMIT_CUSTOM_EVENT_KEY, EmitCustomEvent)
 
-
-
-const handleMouseMove = (e: MouseEvent) => {
-  console.log('mouse move event', e.clientX)
+const toggle = (isOpen : boolean) => {
+  // console.log('isOpen', isOpen.value)
+  if(isOpen){
+    // console.log('opened and emit', isOpen)
+    emitter.emit("custom-expend-rows", { type : 'custom-expend-all', payload: true })
+  } else {
+    // console.log('closed and emit', isOpen)
+    emitter.emit("custom-expend-rows", { type : 'custom-expend-all', payload: false })
+  }
 }
 </script>
 
