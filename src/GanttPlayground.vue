@@ -172,8 +172,8 @@ const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
     endDate = convertStringToDate(chartEnd.value);
   console.log('difftime', parseInt(diffTime, 10), timeline, diffTime);
 
-  startDate = new Date(startDate.getTime() - parseFloat(diffTime)*60000);
-  endDate = new Date(endDate.getTime() - parseFloat(diffTime)*60000);
+  startDate = new Date(startDate.getTime() - parseInt(diffTime)*60000);
+  endDate = new Date(endDate.getTime() - parseInt(diffTime)*60000);
 
   chartStart.value = convertDate2FormatString(startDate);
   chartEnd.value = convertDate2FormatString(endDate);

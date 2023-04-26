@@ -1,49 +1,32 @@
 <template>
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
-      <div
-        v-for="({ label, value, date, width }, index) in timeaxisUnits.upperUnits"
-        :key="label"
-        class="g-upper-timeunit"
-        :style="{
-          background: index % 2 === 0 ? colors.primary : colors.secondary,
-          color: colors.text,
-          width
-        }"
-      >
+      <div v-for="({ label, value, date, width }, index) in timeaxisUnits.upperUnits" :key="label"
+        class="g-upper-timeunit" :style="{
+            background: index % 2 === 0 ? colors.primary : colors.secondary,
+            color: colors.text,
+            width
+          }">
         <slot name="upper-timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
       </div>
     </div>
 
-    <div class="g-timeunits-container">
-      <div
-        v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits"
-        :key="label"
-        class="g-timeunit"
+    <div class="g-timeunits-container" @mousedown="onMouseEvent" @click="onMouseEvent" @dblclick="onMouseEvent"
+      @mouseenter="onMouseEvent" @mouseleave="onMouseEvent" @contextmenu="onMouseEvent">
+      <div v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits" :key="label" class="g-timeunit"
         :style="{
-          background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-          color: colors.text,
-          flexDirection: precision === 'hour' ? 'column' : 'row',
-          alignItems: precision === 'hour' ? '' : 'center',
-          width
-        }"
-        @mousedown="onMouseEvent"
-        @click="onMouseEvent"
-        @dblclick="onMouseEvent"
-        @mouseenter="onMouseEvent"
-        @mouseleave="onMouseEvent"
-        @contextmenu="onMouseEvent"
-      >
+            background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+            color: colors.text,
+            flexDirection: precision === 'hour' ? 'column' : 'row',
+            alignItems: precision === 'hour' ? '' : 'center',
+            width
+          }">
         <slot name="timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
-        <div
-          v-if="precision === 'hour'"
-          class="g-timeaxis-hour-pin"
-          :style="{ background: colors.text }"
-        />
+        <div v-if="precision === 'hour'" class="g-timeaxis-hour-pin" :style="{ background: colors.text }" />
       </div>
     </div>
   </div>
@@ -70,7 +53,7 @@ function firstMousemoveCallback(e: MouseEvent) {
   isDragging.value = true
   const timeline = mapPositionToTimeDiff(e.clientX - pxPrevious.value)
   emitTimelineEvent(e, timeline)
-  // console.log('px diff', e.clientX - pxPrevious.value)
+  console.log('px diff', e.clientX - pxPrevious.value)
 }
 
 const onMouseEvent = (e: MouseEvent) => {
