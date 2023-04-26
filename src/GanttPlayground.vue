@@ -1,25 +1,14 @@
 <template>
-  <g-gantt-chart
-    :chart-start="chartStart"
-    :chart-end="chartEnd"
-    precision="month"
-    :row-height="50"
-    grid
-    width="100%"
-    bar-start="beginDate"
-    bar-end="endDate"
-    :date-format="format"
-    :lines="lines_datetime"
+  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="month" :row-height="50" grid width="100%"
+    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
-    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
-    @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
-    @dragstart-bar="onDragstartBar($event.bar, $event.e)"
-    @drag-bar="onDragBar($event.bar, $event.e)"
+    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)" @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
+    @dragstart-bar="onDragstartBar($event.bar, $event.e)" @drag-bar="onDragBar($event.bar, $event.e)"
     @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
     @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
-  >
+    @drag-timeline="mouseMoveTimeLine($event.e, $event.timeline)">
     <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
     <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" />
   </g-gantt-chart>
@@ -158,15 +147,50 @@ const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string)
 const lines_datetime = ref<GanttLineObject[]>([
   {
     datetime: "2021.05.24 23:00",
-    color:"red",
-    width:'3px',
-    opacity:'0.9',
+    color: "red",
+    width: '3px',
+    opacity: '0.9',
   },
   {
     datetime: "2021.06.24 23:00",
-    color:"yellow",
-    width:'2px',
-    opacity:'0.9',
+    color: "yellow",
+    width: '2px',
+    opacity: '0.9',
   }
 ])
+const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
+  console.log("mouseMoveTimeLine", e, timeline)
+  let diffTime = "0";
+
+  if (timeline !== undefined)
+    diffTime = timeline
+
+  if (isNaN(parseInt(diffTime, 10)))
+    return;
+
+  let startDate = convertStringToDate(chartStart.value),
+    endDate = convertStringToDate(chartEnd.value);
+  console.log('difftime', parseInt(diffTime, 10), timeline, diffTime);
+
+  startDate = new Date(startDate.getTime() - parseFloat(diffTime)*60000);
+  endDate = new Date(endDate.getTime() - parseFloat(diffTime)*60000);
+
+  chartStart.value = convertDate2FormatString(startDate);
+  chartEnd.value = convertDate2FormatString(endDate);
+
+}
+const convertStringToDate = (timestring: string) => {
+  console.log("input time string", timestring);
+  let result = timestring.split(/[\/. ]/);
+  let formatTime = result[2] + '-' + result[1] + '-' + result[0] + 'T' + result[3];
+  return new Date(formatTime)
+}
+const convertDate2FormatString = (datetime: Date) => {
+  console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
+  let formatDate = "21.03.2021 12:00";
+  let result = datetime.toISOString().split(/[-T:]/);
+  formatDate = result[2] + '.' + result[1] + '.' + result[0] + ' ' + result[3] + ':' + result[4];
+  console.log("output date", formatDate);
+  return formatDate
+}
 </script>

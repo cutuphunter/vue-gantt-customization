@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="ganttChart"
-    class="g-gantt-chart"
-    :style="{ width, background: colors.background, fontFamily: font }"
-  >
+  <div ref="ganttChart" class="g-gantt-chart" :style="{ width, background: colors.background, fontFamily: font }">
     <g-gantt-timeaxis v-if="!hideTimeaxis">
       <template #upper-timeunit="{ label, value, date }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
@@ -12,16 +8,18 @@
       <template #timeunit="{ label, value, date }">
         <!-- expose timeunit slot of g-gantt-timeaxis-->
         <slot name="timeunit" :label="label" :value="value" :date="date" />
+
+        <!-- <div v-on:click="(event)=>handleMouseMove(event)">
+          handler
+        </div> -->
       </template>
     </g-gantt-timeaxis>
 
     <!-- <g-gantt-line v-if="!hideTimeaxis" left="30" /> -->
-   
+
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-        <g-gantt-line :lines="lines"
-                  :chart-start-date= "chartStart"
-                  :chart-end-date="chartEnd"  
-                  :highlighted-units="highlightedUnits" />
+    <g-gantt-line v-if="!hideTimeaxis" :lines="lines" :chart-start-date="chartStart" :chart-end-date="chartEnd"
+      :highlighted-units="highlightedUnits" />
 
     <div class="g-gantt-rows-container">
       <slot />
@@ -54,7 +52,7 @@ import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY, EMIT_TIMELINE_EVENT_KEY } from "../provider/symbols.js"
 import type { GanttBarObject, GanttLineObject } from "../types"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
@@ -124,6 +122,7 @@ const emit = defineEmits<{
     e: "contextmenu-bar",
     value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }
   ): void
+  (e: "drag-timeline", value: { e: MouseEvent; timeline?: string | Date }): void
 }>()
 
 const { width, font, colorScheme } = toRefs(props)
@@ -223,6 +222,19 @@ const emitBarEvent = (
       break
   }
 }
+const emitTimelineEvent = (
+  e: MouseEvent,
+  timeline?: string | Date,
+) => {
+
+  // console.log('emitTimeLineEvent', e, timeline)
+
+  switch (e.type) {
+    case "mousemove":
+      emit("drag-timeline", { e, timeline })
+      break
+  }
+}
 
 const ganttChart = ref<HTMLElement | null>(null)
 const chartSize = useElementSize(ganttChart)
@@ -234,6 +246,13 @@ provide(CONFIG_KEY, {
   chartSize
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
+provide(EMIT_TIMELINE_EVENT_KEY, emitTimelineEvent)
+
+
+
+const handleMouseMove = (e: MouseEvent) => {
+  console.log('mouse move event', e.clientX)
+}
 </script>
 
 <style>

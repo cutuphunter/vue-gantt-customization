@@ -23,9 +23,16 @@ export default function useTimePositionMapping(config: GGanttChartConfig = provi
     const diffFromStart = (xPos / width) * totalNumOfMinutes.value
     return format(chartStartDayjs.value.add(diffFromStart, "minutes"), dateFormat.value)
   }
+  const mapPositionToTimeDiff = (xPos: number) => {
+    const width = chartSize.width.value;
+    console.log('xPos and width', xPos, width);
 
+    const diffFromStart = Math.ceil((xPos / width) * totalNumOfMinutes.value)
+    return diffFromStart.toString()
+  }
   return {
     mapTimeToPosition,
-    mapPositionToTime
+    mapPositionToTime,
+    mapPositionToTimeDiff,
   }
 }

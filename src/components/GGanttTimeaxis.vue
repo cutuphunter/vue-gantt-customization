@@ -29,6 +29,12 @@
           alignItems: precision === 'hour' ? '' : 'center',
           width
         }"
+        @mousedown="onMouseEvent"
+        @click="onMouseEvent"
+        @dblclick="onMouseEvent"
+        @mouseenter="onMouseEvent"
+        @mouseleave="onMouseEvent"
+        @contextmenu="onMouseEvent"
       >
         <slot name="timeunit" :label="label" :value="value" :date="date">
           {{ label }}
@@ -46,9 +52,52 @@
 <script setup lang="ts">
 import provideConfig from "../provider/provideConfig.js"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits.js"
+import { computed, ref, toRefs, watch, onMounted, inject } from "vue"
+import provideEmitTimelineEvent from "../provider/provideEmitTimelineEvent.js"
+import useTimePositionMapping from "../composables/useTimePositionMapping.js"
 
 const { precision, colors } = provideConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
+
+const { mapTimeToPosition, mapPositionToTime, mapPositionToTimeDiff } = useTimePositionMapping()
+
+const emitTimelineEvent = provideEmitTimelineEvent()
+
+const isDragging = ref(false)
+const pxPrevious = ref(0)
+
+function firstMousemoveCallback(e: MouseEvent) {
+  isDragging.value = true
+  const timeline = mapPositionToTimeDiff(e.clientX - pxPrevious.value)
+  emitTimelineEvent(e, timeline)
+  // console.log('px diff', e.clientX - pxPrevious.value)
+}
+
+const onMouseEvent = (e: MouseEvent) => {
+  e.preventDefault()
+  if (e.type === "mousedown") {
+    pxPrevious.value = e.clientX;
+    prepareForDrag()
+  }
+  // const datetime = mapPositionToTime(e.clientX - pxPrevious.value)
+  // // console.log('timeline mouse event', e, datetime)
+  // emitTimelineEvent(e, datetime)
+}
+const prepareForDrag = () => {
+  isDragging.value = true
+  window.addEventListener("mousemove", firstMousemoveCallback, {
+    once: false
+  }) // on first mousemove event
+  window.addEventListener(
+    "mouseup",
+    () => {
+      // in case user does not move the mouse after mousedown at all
+      window.removeEventListener("mousemove", firstMousemoveCallback)
+      isDragging.value = false
+    },
+    { once: true }
+  )
+}
 </script>
 
 <style>

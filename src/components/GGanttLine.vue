@@ -41,13 +41,13 @@ const calcLeft = (curTime: string, startDateTime: string | Date, endDateTime: st
 
   let diffToCur = 0;
   let leftValue = "0";
-  console.log(diffMins); // Output: 90
+  console.log(diffMins, dateString, dateString1); // Output: 90
 
   let formatTime = curTime.replace(' ', 'T');
   formatTime = formatTime.replace(/\./g, '-');
   const curDate = new Date(`${formatTime}:00.00Z`);
-  console.log('curDate', `${formatTime}:00.00Z`);
-  console.log('changed Time', curDate, dateObj, dateObj1);
+  // console.log('curDate', `${formatTime}:00.00Z`);
+  // console.log('changed Time', curDate, dateObj, dateObj1);
 
   if (curDate > dateObj && curDate < dateObj1) {
     console.log('is in current time');
