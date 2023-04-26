@@ -27,12 +27,12 @@ const { timeaxisUnits } = useTimeaxisUnits()
 const calcLeft = (curTime: string, startDateTime: string | Date, endDateTime: string | Date) => {
 
   const dateString = startDateTime.toString();
-  const [day, month, year, hours, minutes] = dateString.split(/[.: ]/);
+  const [year, month, day, hours, minutes] = dateString.split(/[- :]/);
   const isoString = `${year}-${month}-${day}T${hours}:${minutes}:00`;
   const dateObj = new Date(isoString);
 
   const dateString1 = endDateTime.toString();
-  const [day1, month1, year1, hours1, minutes1] = dateString1.split(/[.: ]/);
+  const [year1, month1, day1, hours1, minutes1] = dateString1.split(/[- :]/);
   const isoString1 = `${year1}-${month1}-${day1}T${hours1}:${minutes1}:00`;
   const dateObj1 = new Date(isoString1);
 

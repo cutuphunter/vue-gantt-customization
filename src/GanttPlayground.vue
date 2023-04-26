@@ -1,5 +1,5 @@
 <template>
-  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="month" :row-height="50" grid width="100%"
+  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" :row-height="50" grid width="100%"
     bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
@@ -22,14 +22,14 @@ import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
 import type { GanttLineObject } from "./types.js"
 
-const chartStart = ref("21.03.2021 12:00")
-const chartEnd = ref("15.07.2021 12:00")
-const format = ref("DD.MM.YYYY HH:mm")
+const chartStart = ref("2023-04-25 13:00")//25.04.2023 12:00
+const chartEnd = ref("2023-04-26 12:00")
+const format = ref("YYYY-MM-DD HH:mm")
 
 const bars1 = ref<GanttBarObject[]>([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: "2023-04-25 14:00",
+    endDate: "2023-04-25 18:00",
     ganttBarConfig: {
       id: "8621987329",
       label: "I'm in a bundle",
@@ -40,8 +40,8 @@ const bars1 = ref<GanttBarObject[]>([
 
 const bars2 = ref([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: "2023-05-24 12:00",
+    endDate: "2023-05-29 12:00",
     ganttBarConfig: {
       id: "1592311887",
       label: "I'm in a bundle",
@@ -52,8 +52,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "01.01.2021 00:00",
-    endDate: "01.03.2021 00:00",
+    beginDate: "2023-07-24 12:00",
+    endDate: "2023-09-29 12:00",
     ganttBarConfig: {
       id: "7716981641",
       label: "Lorem ipsum dolor",
@@ -64,8 +64,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "15.06.2021 00:00",
-    endDate: "10.07.2021 00:00",
+    beginDate: "2023-03-29 12:00",
+    endDate: "2023-04-29 12:00",
     ganttBarConfig: {
       id: "9716981641",
       label: "Oh hey",
@@ -83,8 +83,8 @@ const addBar = () => {
     return
   }
   const bar = {
-    beginDate: "26.02.2021 00:00",
-    endDate: "26.03.2021 02:00",
+    beginDate: "2023-04-26 09:00",
+    endDate: "2023-04-26 16:00",
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,
@@ -146,13 +146,13 @@ const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string)
 }
 const lines_datetime = ref<GanttLineObject[]>([
   {
-    datetime: "2021.05.24 23:00",
+    datetime: "2023-04-25 23:00",
     color: "red",
     width: '3px',
     opacity: '0.9',
   },
   {
-    datetime: "2021.06.24 23:00",
+    datetime: "2023-04-26 13:00",
     color: "yellow",
     width: '2px',
     opacity: '0.9',
@@ -174,22 +174,23 @@ const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
 
   startDate = new Date(startDate.getTime() - parseInt(diffTime)*60000);
   endDate = new Date(endDate.getTime() - parseInt(diffTime)*60000);
-
+  
+  console.log('update dates', startDate, endDate);
   chartStart.value = convertDate2FormatString(startDate);
   chartEnd.value = convertDate2FormatString(endDate);
 
 }
 const convertStringToDate = (timestring: string) => {
   console.log("input time string", timestring);
-  let result = timestring.split(/[\/. ]/);
-  let formatTime = result[2] + '-' + result[1] + '-' + result[0] + 'T' + result[3];
+  let result = timestring.split(/[- ]/);
+  let formatTime = result[0] + '-' + result[1] + '-' + result[2] + 'T' + result[3];
   return new Date(formatTime)
 }
 const convertDate2FormatString = (datetime: Date) => {
   console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
-  let formatDate = "21.03.2021 12:00";
+  let formatDate = "2023-04-25 12:00";
   let result = datetime.toISOString().split(/[-T:]/);
-  formatDate = result[2] + '.' + result[1] + '.' + result[0] + ' ' + result[3] + ':' + result[4];
+  formatDate = result[0] + '-' + result[1] + '-' + result[2] + ' ' + result[3] + ':' + result[4];
   console.log("output date", formatDate);
   return formatDate
 }
