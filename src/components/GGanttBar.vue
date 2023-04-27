@@ -113,7 +113,7 @@ onMounted(() => {
     () => {
       xStart.value = mapTimeToPosition(bar.value[barStart.value])
       xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-      if(verticalMove){
+      if(verticalMove.value){
         nTop.value = bar.value["clientY"]
       }
     },

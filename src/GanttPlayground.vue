@@ -1,6 +1,6 @@
 <template>
   <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%"
-    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="true"
+    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="false"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -42,20 +42,20 @@ const bars1 = ref<GanttBarObject[]>([
 
 const bars2 = ref([
   {
-    beginDate: "2023-05-24 12:00",
-    endDate: "2023-05-29 12:00",
+    beginDate: "2023-04-24 17:00",
+    endDate: "2023-04-24 19:00",
     ganttBarConfig: {
       id: "1592311887",
       label: "I'm in a bundle",
-      bundle: "bundle2",
+      bundle: "bundle1",
       style: {
         background: "magenta"
       }
     }
   },
   {
-    beginDate: "2023-07-24 12:00",
-    endDate: "2023-09-29 12:00",
+    beginDate: "2023-04-25 12:00",
+    endDate: "2023-04-25 18:00",
     ganttBarConfig: {
       id: "7716981641",
       label: "Lorem ipsum dolor",
@@ -66,8 +66,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "2023-03-29 12:00",
-    endDate: "2023-04-29 12:00",
+    beginDate: "2023-04-25 15:00",
+    endDate: "2023-04-25 19:00",
     ganttBarConfig: {
       id: "9716981641",
       label: "Oh hey",
