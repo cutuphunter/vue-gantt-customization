@@ -1,6 +1,6 @@
 <template>
   <div ref="ganttChart" class="g-gantt-chart" :style="{ width, background: colors.background, fontFamily: font }">
-    <CToggleButton :custom-handle="toggle"/>
+    <CToggleButton :custom-handle="toggle" />
     <g-gantt-timeaxis v-if="!hideTimeaxis">
       <template #upper-timeunit="{ label, value, date }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
@@ -53,7 +53,7 @@ import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY, EMIT_TIMELINE_EVENT_KEY, EMIT_CUSTOM_EVENT_KEY} from "../provider/symbols.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY, EMIT_TIMELINE_EVENT_KEY, EMIT_CUSTOM_EVENT_KEY } from "../provider/symbols.js"
 import type { GanttBarObject, GanttLineObject } from "../types"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
@@ -89,6 +89,7 @@ export interface GGanttChartProps {
   highlightedUnits?: number[]
   font?: string
   lines: GanttLineObject[]
+  verticalMove?: boolean
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
@@ -110,7 +111,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   noOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => [],
-  font: "inherit"
+  font: "inherit",
+  verticalMove : false
 })
 
 const emit = defineEmits<{
@@ -233,6 +235,7 @@ const emitBarEvent = (
     case "dragend":
       isDragging.value = false
       emit("dragend-bar", { bar, e, movedBars })
+      handleYmove(bar.yClient)
       break
     case "contextmenu":
       emit("contextmenu-bar", { bar, e, datetime })
@@ -277,16 +280,25 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 provide(EMIT_TIMELINE_EVENT_KEY, emitTimelineEvent)
 provide(EMIT_CUSTOM_EVENT_KEY, EmitCustomEvent)
 
-const toggle = (isOpen : boolean) => {
+const toggle = (isOpen: boolean) => {
   // console.log('isOpen', isOpen.value)
-  if(isOpen){
+  if (isOpen) {
     // console.log('opened and emit', isOpen)
-    emitter.emit("custom-expend-rows", { type : 'custom-expend-all', payload: true })
+    emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: true })
   } else {
     // console.log('closed and emit', isOpen)
-    emitter.emit("custom-expend-rows", { type : 'custom-expend-all', payload: false })
+    emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: false })
   }
+  
 }
+const handleYmove = (yClient : number)=>{
+
+  const parentNode = document.querySelector(".g-gantt-rows-container");
+  const firstChild = parentNode.childNodes[0];
+  console.log('yClient',yClient, firstChild); // this will output the <p> element
+}
+
+
 </script>
 
 <style>

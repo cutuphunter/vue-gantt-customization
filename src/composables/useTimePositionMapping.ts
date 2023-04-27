@@ -30,9 +30,30 @@ export default function useTimePositionMapping(config: GGanttChartConfig = provi
     const diffFromStart = Math.ceil((xPos / width) * totalNumOfMinutes.value)
     return diffFromStart.toString()
   }
+  const mapPositionToRow = (yPos: number) => {
+    console.log('yPos->rowID', yPos);
+    const timeaxisContainer = document.querySelector(".g-timeaxis")!;
+    let TotalHeight = (timeaxisContainer as HTMLElement).offsetHeight;
+    let locationid = "-1";
+    let fixedTop = 0;
+    const rowsContainer = document.querySelector(".g-gantt-rows-container")!;
+    Array.from(
+      rowsContainer.children
+    ).forEach((ganttRow) => {
+      // console.log((ganttRow as HTMLElement).offsetHeight)
+      const rect = ganttRow.getBoundingClientRect();
+      if(yPos >= rect.top && yPos < rect.bottom){
+        locationid = ganttRow.getAttribute('locationid')!;
+        fixedTop = rect.top;
+      }
+    })
+    
+    return locationid
+  }
   return {
     mapTimeToPosition,
     mapPositionToTime,
     mapPositionToTimeDiff,
+    mapPositionToRow
   }
 }

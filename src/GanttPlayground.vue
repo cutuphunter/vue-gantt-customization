@@ -1,6 +1,6 @@
 <template>
   <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%"
-    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40"
+    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="true"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -9,8 +9,10 @@
     @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
     @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
     @drag-timeline="mouseMoveTimeLine($event.e, $event.timeline)">
-    <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
-    <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" />
+    <!-- <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
+    <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" /> -->
+    <g-gantt-row v-for="location of locations" :label="location.name" :bars="location.bars" :key="location.locationid"
+        :locationid="location.locationid" :row-height="90"/>
   </g-gantt-chart>
 
   <button type="button" @click="addBar()">Add bar</button>
@@ -78,6 +80,18 @@ const bars2 = ref([
     }
   }
 ])
+const locations = ref([
+  {
+    locationid : 0,
+    name: 'first row',
+    bars : bars1
+  },
+  {
+    locationid : 2,
+    name: 'second row',
+    bars : bars2
+  },
+ ])
 const addBar = () => {
   if (bars1.value.some((bar) => bar.ganttBarConfig.id === "test1")) {
     return
@@ -139,6 +153,8 @@ const onDragendBar = (
   movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
 ) => {
   console.log("dragend-bar", bar, e, movedBars)
+  
+  locations.value = [...locations.value]
 }
 
 const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {

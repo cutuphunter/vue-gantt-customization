@@ -1,23 +1,16 @@
 <template>
-  <div
-    :id="barConfig.id"
-    class="g-gantt-bar"
-    :style="{
+  <div :id="barConfig.id" class="g-gantt-bar draggable" :style="{
       ...barConfig.style,
       position: 'absolute',
-      top: `${rowHeight * 0.1}px`,
+      top: `${nTop}px`,
       left: `${xStart}px`,
       width: `${xEnd - xStart}px`,
       height: `${rowHeight * 0.8}px`,
       zIndex: isDragging ? 3 : 2
     }"
-    @mousedown="onMouseEvent"
-    @click="onMouseEvent"
-    @dblclick="onMouseEvent"
-    @mouseenter="onMouseEvent"
-    @mouseleave="onMouseEvent"
-    @contextmenu="onMouseEvent"
-  >
+    draggable="true"
+    @mousedown="onMouseEvent" @click="onMouseEvent" @dblclick="onMouseEvent" @mouseenter="onMouseEvent"
+    @mouseleave="onMouseEvent" @contextmenu="onMouseEvent">
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
         <div>
@@ -48,7 +41,7 @@ const props = defineProps<{
 }>()
 const emitBarEvent = provideEmitBarEvent()
 const config = provideConfig()
-const { rowHeight } = config
+const { rowHeight, verticalMove} = config
 
 const { bar } = toRefs(props)
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping()
@@ -62,6 +55,10 @@ const barConfig = computed(() => bar.value.ganttBarConfig)
 function firstMousemoveCallback(e: MouseEvent) {
   barConfig.value.bundle != null ? initDragOfBundle(bar.value, e) : initDragOfBar(bar.value, e)
   isDragging.value = true
+
+  yPrev.value = e.clientY
+  console.log('mouse position', yPrev.value)
+  // nTop.value += (e.clientY - yPrev.value)// - barContainer.top
 }
 
 const prepareForDrag = () => {
@@ -69,7 +66,6 @@ const prepareForDrag = () => {
   if (barConfig.value.immobile) {
     return
   }
-
   window.addEventListener("mousemove", firstMousemoveCallback, {
     once: true
   }) // on first mousemove event
@@ -79,6 +75,8 @@ const prepareForDrag = () => {
       // in case user does not move the mouse after mousedown at all
       window.removeEventListener("mousemove", firstMousemoveCallback)
       isDragging.value = false
+      
+      roundPosition(nTop.value)
     },
     { once: true }
   )
@@ -90,12 +88,16 @@ const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
   if (e.type === "mousedown") {
     prepareForDrag()
+    console.log('bar instance', bar.value)
   }
   const barContainer = barContainerEl?.value?.getBoundingClientRect()
   if (!barContainer) {
     return
   }
   const datetime = mapPositionToTime(e.clientX - barContainer.left)
+
+  bar.value.yClient = yPrev.value
+  console.log('barcontainer', barContainer, e.screenY, yPrev.value)
   emitBarEvent(e, bar.value, datetime)
 }
 
@@ -103,17 +105,24 @@ const { barStart, barEnd, width, chartStart, chartEnd, chartSize } = config
 
 const xStart = ref(0)
 const xEnd = ref(0)
-
+const nTop = ref(rowHeight.value * 0.1)
+const yPrev = ref(0)
 onMounted(() => {
   watch(
     [bar, width, chartStart, chartEnd, chartSize.width],
     () => {
       xStart.value = mapTimeToPosition(bar.value[barStart.value])
       xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+      if(verticalMove){
+        nTop.value = bar.value["clientY"]
+      }
     },
     { deep: true, immediate: true }
   )
 })
+const roundPosition = (curYpos : number)=>{
+  nTop.value = rowHeight.value * 0.1
+}
 </script>
 
 <style>
@@ -129,16 +138,19 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 0 14px 0 14px; /* 14px is the width of the handle */
+  padding: 0 14px 0 14px;
+  /* 14px is the width of the handle */
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.g-gantt-bar-label > * {
+
+.g-gantt-bar-label>* {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .g-gantt-bar-handle-left,
 .g-gantt-bar-handle-right {
   position: absolute;
@@ -150,9 +162,11 @@ onMounted(() => {
   cursor: ew-resize;
   top: 0;
 }
+
 .g-gantt-bar-handle-left {
   left: 0;
 }
+
 .g-gantt-bar-handle-right {
   right: 0;
 }

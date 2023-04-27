@@ -16,9 +16,10 @@ export default function createBarDrag(
 
   const isDragging = ref(false)
   let cursorOffsetX = 0
+  let cursorOffsetY = 0
   let dragCallBack: (e: MouseEvent) => void
 
-  const { mapPositionToTime } = useTimePositionMapping(config)
+  const { mapPositionToTime, mapPositionToRow } = useTimePositionMapping(config)
   const { toDayjs } = useDayjsHelper(config)
 
   const initDrag = (e: MouseEvent) => {
@@ -28,6 +29,7 @@ export default function createBarDrag(
     }
 
     cursorOffsetX = e.clientX - (barElement.getBoundingClientRect().left || 0)
+    cursorOffsetY = e.clientY - (barElement.getBoundingClientRect().top || 0)
     const mousedownType = (e.target as Element).className
     switch (mousedownType) {
       case "g-gantt-bar-handle-left":
@@ -66,6 +68,9 @@ export default function createBarDrag(
     }
     bar[barStart.value] = mapPositionToTime(xStart)
     bar[barEnd.value] = mapPositionToTime(xEnd)
+
+    bar['clientY'] = e.clientY  - barContainer.top - cursorOffsetY
+    bar['rowId'] = mapPositionToRow(e.clientY)
     onDrag(e, bar)
   }
 
