@@ -53,7 +53,7 @@ function firstMousemoveCallback(e: MouseEvent) {
   isDragging.value = true
   const timeline = mapPositionToTimeDiff(e.clientX - pxPrevious.value)
   emitTimelineEvent(e, timeline)
-  console.log('px diff', e.clientX - pxPrevious.value)
+  // console.log('px diff', e.clientX - pxPrevious.value)
 }
 
 const onMouseEvent = (e: MouseEvent) => {

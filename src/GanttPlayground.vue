@@ -1,6 +1,6 @@
 <template>
-  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%"
-    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="true"
+  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%" bar-start="beginDate"
+    bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="true"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -12,7 +12,7 @@
     <!-- <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
     <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" /> -->
     <g-gantt-row v-for="location of locations" :label="location.name" :bars="location.bars" :key="location.locationid"
-        :locationid="location.locationid" :row-height="90"/>
+      :locationid="location.locationid" :row-height="90" />
   </g-gantt-chart>
 
   <button type="button" @click="addBar()">Add bar</button>
@@ -82,16 +82,16 @@ const bars2 = ref([
 ])
 const locations = ref([
   {
-    locationid : 0,
+    locationid: 0,
     name: 'first row',
-    bars : bars1
+    bars: bars1
   },
   {
-    locationid : 2,
+    locationid: 2,
     name: 'second row',
-    bars : bars2
+    bars: bars2
   },
- ])
+])
 const addBar = () => {
   if (bars1.value.some((bar) => bar.ganttBarConfig.id === "test1")) {
     return
@@ -153,7 +153,7 @@ const onDragendBar = (
   movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
 ) => {
   console.log("dragend-bar", bar, e, movedBars)
-  
+
   locations.value = [...locations.value]
 }
 
@@ -184,25 +184,28 @@ const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
   if (isNaN(parseInt(diffTime, 10)))
     return;
 
+
   let startDate = convertStringToDate(chartStart.value),
     endDate = convertStringToDate(chartEnd.value);
 
   console.log('difftime', parseInt(diffTime, 10), timeline, diffTime + 'mins');
   console.log(startDate.getTime(), endDate.getTime());
+  console.log(startDate.toISOString(), endDate.toISOString());
 
   const sDate = new Date();//startDate.getTime() parseInt(diffTime)*60000
   const eDate = new Date();//endDate.getTime()parseInt(diffTime)*60000
-  
-  sDate.setTime(startDate.getTime());
-  eDate.setTime(endDate.getTime());
 
+  sDate.setTime(startDate.getTime() - parseInt(diffTime) * 60000);
+  eDate.setTime(endDate.getTime() - parseInt(diffTime) * 60000);
 
-  console.log('update dates', sDate, eDate);
+  // console.log('iso dates', sDate.toISOString(), eDate.toISOString());
+  // console.log('standard dates', sDate.toString(), eDate.toString());
+  // console.log('changed dates', convertDate2FormatString(sDate), convertDate2FormatString(eDate));
   chartStart.value = convertDate2FormatString(sDate);
   chartEnd.value = convertDate2FormatString(eDate);
 }
 const convertStringToDate = (timestring: string) => {
- 
+
   console.log("input time string", timestring);
   let result = timestring.split(/[- ]/);
   let formatTime = result[0] + '-' + result[1] + '-' + result[2] + 'T' + result[3];
@@ -210,11 +213,13 @@ const convertStringToDate = (timestring: string) => {
   return resultDate;
 }
 const convertDate2FormatString = (datetime: Date) => {
-  console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
+  // console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
   let formatDate = "2023-04-25 12:00";
-  let result = datetime.toISOString().split(/[-T:]/);
-  console.log(datetime.toString());
-  formatDate = result[0] + '-' + result[1] + '-' + result[2] + ' ' + result[3] + ':' + result[4];
+  formatDate = datetime.getFullYear() + '-'
+   + ('0' + (datetime.getMonth() + 1)).slice(-2)
+  + '-' + ('0' + datetime.getDate()).slice(-2) 
+  + ' ' + ('0' + datetime.getHours()).slice(-2) 
+  + ':' + ('0' + datetime.getMinutes()).slice(-2);
   console.log("output date", formatDate);
   return formatDate
 }

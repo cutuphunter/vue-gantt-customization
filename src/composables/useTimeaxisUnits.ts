@@ -122,7 +122,7 @@ export default function useTimeaxisUnits() {
         width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
-    console.log('lowerUnits', lowerUnits)
+    // console.log('lowerUnits', lowerUnits)
     return { upperUnits, lowerUnits }
   })
 

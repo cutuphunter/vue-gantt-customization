@@ -30,10 +30,11 @@ const onClickHandler = (e: MouseEvent) => {
 }
 
 .toggle-button {
-   /* background: transparent; */
+   background: transparent;
    cursor: pointer;
     width: 20px;
     height: 20px;
+    line-height: 20px;
     color: black;
     font-size: 20px;
     font-weight: 300;
