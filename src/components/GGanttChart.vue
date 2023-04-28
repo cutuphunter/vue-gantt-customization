@@ -58,19 +58,8 @@ import type { GanttBarObject, GanttLineObject } from "../types"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
 import CToggleButton from './CToggleButton.vue';
-import mitt from 'mitt';
-
-import { getCurrentInstance } from 'vue'
-const app = getCurrentInstance()
-const emitter = app.appContext.config.globalProperties.emitter // app is undefined
-
-// const emitter = mitt();
-// emitter.on("custom-expend-rows", isOpen => {
-//   console.log('event bus data', isOpen)
-//   isOpen = isOpen;
-// });
-
-// const emitter = mitt();
+// import mitt from 'mitt';
+import { GanttEventBus} from "./EventBus"
 
 export interface GGanttChartProps {
   chartStart: string | Date
@@ -281,21 +270,22 @@ provide(EMIT_TIMELINE_EVENT_KEY, emitTimelineEvent)
 provide(EMIT_CUSTOM_EVENT_KEY, EmitCustomEvent)
 
 const toggle = (isOpen: boolean) => {
-  // console.log('isOpen', isOpen.value)
   if (isOpen) {
-    // console.log('opened and emit', isOpen)
-    emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: true })
+    console.log('opened and emit', isOpen)
+    // emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: true })
+    GanttEventBus.emit("custom-expend-rows", true)
   } else {
-    // console.log('closed and emit', isOpen)
-    emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: false })
+    console.log('closed and emit', isOpen)
+    // emitter.emit("custom-expend-rows", { type: 'custom-expend-all', payload: false })
+    GanttEventBus.emit("custom-expend-rows", false)
   }
-  
 }
+
 const handleYmove = (yClient : number)=>{
 
   const parentNode = document.querySelector(".g-gantt-rows-container");
-  const firstChild = parentNode.childNodes[0];
-  console.log('yClient',yClient, firstChild); // this will output the <p> element
+  // const firstChild = parentNode.childNodes[0];
+  console.log('yClient',yClient, parentNode); // this will output the <p> element
 }
 
 

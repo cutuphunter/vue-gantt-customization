@@ -1,61 +1,45 @@
 <template>
-    <div class="g-gantt-toggle">
-        <button class="toggle-button" @click="toggle">{{ isOpen ? '-' : '+' }}</button>
+    <div class="toggle-container">
+        <button @click="onClickHandler" class="toggle-button">
+        + 
+        </button>
     </div>
 </template>
   
-<script>
-export default {
-    name: 'CToggleButton',
-    props: {
-        title: String,
-        description: String,
-        // isOpen: {
-        //     type:boolean,
-        //     default:false,
-        // }
-        customHandle: {
-            type : Function,
-            default: (param)=>{}
-        }
-    },
-    data() {
-        return {
-            isOpen: false,
-        };
-    },
-    methods: {
-        toggle(e){
-            this.isOpen = !this.isOpen
-            // console.log('isOpen', isOpen.value)
-            this.customHandle(this.isOpen);
-        }
-    },
-};
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const props = defineProps<{
+    customHandle: Function,
+}>()
+
+const isOpen = ref(false)
+const onClickHandler = (e: MouseEvent) => {
+    isOpen.value = !isOpen.value
+    props.customHandle(isOpen.value)
+}
 </script>
   
-<style scoped>
-/* Your styling here */
-.g-gantt-toggle {
+<style>
+.toggle-container {
     position: absolute;
-    top: 0;
-    left: 0px;
-    padding: 0px 8px;
-    display: flex;
-    align-items: center;
-    /* height: 20%; */
-    min-height: 20px;
-    font-size: 0.8em;
-    font-weight: bold;
-    border-bottom-right-radius: 6px;
+    z-index: 10;
     background: transparent;
-    z-index: 5;
+    top: 0;
+    left: 0;
 }
 
 .toggle-button {
+   /* background: transparent; */
+   cursor: pointer;
     width: 20px;
-    color: red;
+    height: 20px;
+    color: black;
+    font-size: 20px;
+    font-weight: 300;
     border-radius: 5px;
-    border: 1px solid green;
+    border: 0px solid gray;
 }
 </style>
+  
+  

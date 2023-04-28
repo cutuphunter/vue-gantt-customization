@@ -26,17 +26,20 @@ import type { GanttBarObject } from "../types"
 import GGanttBar from "./GGanttBar.vue"
 import { BAR_CONTAINER_KEY } from "../provider/symbols"
 import CToggleButton from './CToggleButton.vue';
+import { GanttEventBus } from "./EventBus"
 
-import { getCurrentInstance } from 'vue'
+// import { getCurrentInstance } from 'vue'
 
-const app = getCurrentInstance()
-const bus = app.appContext.config.globalProperties.emitter // app is undefined
+// const app = getCurrentInstance()
+// const bus = app.appContext.config.globalProperties.emitter // app is undefined
 
-const emitter = app.appContext.config.globalProperties.emitter;
-emitter.on("custom-expend-rows", (receiveData) => {
-  // console.log('event bus data', receiveData)
-  toggle(receiveData.payload)
-});
+// const emitter = app.appContext.config.globalProperties.emitter;
+// emitter.on("custom-expend-rows", (receiveData) => {
+//   // console.log('event bus data', receiveData)
+//   toggle(receiveData.payload)
+// });
+
+
 
 const props = defineProps<{
   label: string
@@ -87,6 +90,14 @@ const toggle = (isOpen: boolean) => {
   }
 
 }
+
+const handleEventBus = (event: any, payload: boolean)=>{
+  console.log('event bus data', payload)
+  toggle(payload)
+}
+
+GanttEventBus.on(handleEventBus);
+
 </script>
 
 <style>
@@ -107,7 +118,7 @@ const toggle = (isOpen: boolean) => {
   position: absolute;
   top: 0;
   left: 0px;
-  padding: 0px 8px;
+  padding: 0px 10px 0px 30px;
   display: flex;
   align-items: center;
   height: 60%;

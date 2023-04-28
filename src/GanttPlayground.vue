@@ -1,6 +1,6 @@
 <template>
   <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="hour" grid width="100%"
-    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="false"
+    bar-start="beginDate" bar-end="endDate" :date-format="format" :lines="lines_datetime" :rowHeight="40" :verticalMove="true"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
