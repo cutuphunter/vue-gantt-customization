@@ -24,7 +24,7 @@ import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
 import type { GanttLineObject } from "./types.js"
 
-const chartStart = ref("2023-04-25 13:00")//25.04.2023 12:00
+const chartStart = ref("2023-04-24 13:00")//25.04.2023 12:00
 const chartEnd = ref("2023-04-26 12:00")
 const format = ref("YYYY-MM-DD HH:mm")
 
@@ -183,7 +183,6 @@ const mouseMoveTimeLine = (e: MouseEvent, timeline?: string) => {
 
   if (isNaN(parseInt(diffTime, 10)))
     return;
-
 
   let startDate = convertStringToDate(chartStart.value),
     endDate = convertStringToDate(chartEnd.value);

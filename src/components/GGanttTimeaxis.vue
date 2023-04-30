@@ -15,7 +15,7 @@
 
     <div class="g-timeunits-container" @mousedown="onMouseEvent" @click="onMouseEvent" @dblclick="onMouseEvent"
       @mouseenter="onMouseEvent" @mouseleave="onMouseEvent" @contextmenu="onMouseEvent">
-      <div v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits" :key="label" class="g-timeunit"
+      <div v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits" :key="index" class="g-timeunit"
         :style="{
             background: index % 2 === 0 ? colors.ternary : colors.quartenary,
             color: colors.text,
