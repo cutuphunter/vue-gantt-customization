@@ -84,7 +84,7 @@ const locations = ref([
   {
     locationid: 0,
     name: 'first row',
-    bars: bars1
+    bars: bars1,
   },
   {
     locationid: 2,
@@ -215,10 +215,10 @@ const convertDate2FormatString = (datetime: Date) => {
   // console.log("input date", datetime, datetime.toISOString());//.slice(0,10)
   let formatDate = "2023-04-25 12:00";
   formatDate = datetime.getFullYear() + '-'
-   + ('0' + (datetime.getMonth() + 1)).slice(-2)
-  + '-' + ('0' + datetime.getDate()).slice(-2) 
-  + ' ' + ('0' + datetime.getHours()).slice(-2) 
-  + ':' + ('0' + datetime.getMinutes()).slice(-2);
+    + ('0' + (datetime.getMonth() + 1)).slice(-2)
+    + '-' + ('0' + datetime.getDate()).slice(-2)
+    + ' ' + ('0' + datetime.getHours()).slice(-2)
+    + ':' + ('0' + datetime.getMinutes()).slice(-2);
   console.log("output date", formatDate);
   return formatDate
 }
